@@ -39,7 +39,7 @@ namespace scene3d_animation
             // glControl1
             // 
             this.glControl1.BackColor = System.Drawing.Color.Black;
-            this.glControl1.Location = new System.Drawing.Point(13, 13);
+            this.glControl1.Location = new System.Drawing.Point(12, 13);
             this.glControl1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.glControl1.Name = "glControl1";
             this.glControl1.Size = new System.Drawing.Size(1309, 612);
@@ -51,13 +51,13 @@ namespace scene3d_animation
             // timer1
             // 
             this.timer1.Enabled = true;
-            this.timer1.Interval = 17;
+            this.timer1.Interval = 16;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // trackBar1
             // 
             this.trackBar1.Location = new System.Drawing.Point(12, 641);
-            this.trackBar1.Maximum = 7200;
+            this.trackBar1.Maximum = 7500;
             this.trackBar1.Name = "trackBar1";
             this.trackBar1.Size = new System.Drawing.Size(1310, 61);
             this.trackBar1.TabIndex = 1;

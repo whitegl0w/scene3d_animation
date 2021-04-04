@@ -22,9 +22,9 @@ namespace scene3d_animation.Classes
         public Vector3 position;
         public Vector3 size;
         public Vector3 angle;
-        private Func<int, Vector3, Vector3> animationrotate;
-        private Func<int, Vector3, Vector3> animationscale;
-        private Func<int, Vector3, Vector3> animationtrans;
+        private List<Animation.AnimationFunc> animationrotate;
+        private List<Animation.AnimationFunc> animationscale;
+        private List<Animation.AnimationFunc> animationtrans;
 
         // name - произвольное имя объекта
         private Model3D(string name = "")
@@ -33,9 +33,9 @@ namespace scene3d_animation.Classes
             position = new Vector3(0);
             size = new Vector3(1);
             angle = new Vector3(0);
-            animationrotate = (t, curr) => curr;
-            animationtrans = (t, curr) => curr;
-            animationscale = (t, curr) => curr;
+            animationrotate = new List<Animation.AnimationFunc>();
+            animationtrans = new List<Animation.AnimationFunc>();
+            animationscale = new List<Animation.AnimationFunc>();
         }
 
         // filename - путь к файлу с моделью, name - произвольное имя объекта
@@ -45,7 +45,7 @@ namespace scene3d_animation.Classes
             displayList = loader.LoadPath(filename, notexture);
             
         }
-        public Model3D(int displayList, string name = "") :this(name)
+        public Model3D(int displayList, string name = ""):this(name)
         {
             this.displayList = displayList;
         }
@@ -54,34 +54,50 @@ namespace scene3d_animation.Classes
         {
             GL.PushMatrix();
             GL.Translate(position);
-            GL.Scale(size);
+            
             GL.Rotate(angle.X, 1, 0, 0);
             GL.Rotate(angle.Y, 0, 1, 0);
             GL.Rotate(angle.Z, 0, 0, 1);
+            GL.Scale(size);
             GL.CallList(displayList);
             GL.PopMatrix();
         }
 
-        public Func<int, Vector3, Vector3> AnimationRotate
+        public List<Animation.AnimationFunc> AnimationRotate
         {
-            set => animationrotate = value;
+            get => animationrotate;
         }
 
-        public Func<int, Vector3, Vector3> AnimationScale
+        public List<Animation.AnimationFunc> AnimationScale
         {
-            set => animationscale = value;
+            get => animationscale;
         }
 
-        public Func<int, Vector3, Vector3> AnimationTrans
+        public List<Animation.AnimationFunc> AnimationTrans
         {
-            set => animationtrans = value;
+            get => animationtrans;
         }
 
         public void AnimationTick(int time)
         {
-            position = animationtrans(time, position);
-            size = animationscale(time, size);
-            angle = animationrotate(time, angle);
+            animationtrans.ForEach(x =>
+            {
+                if (x.start <= time && time <= x.end)
+                    position = x.func(time, position);
+            });
+            animationrotate.ForEach(x =>
+            {
+                if (x.start <= time && time <= x.end)
+                    angle = x.func(time, angle);
+            });
+            animationscale.ForEach(x =>
+            {
+                if (x.start <= time && time <= x.end)
+                    size = x.func(time, size);
+            });
+            if (angle.X >= 360) angle.X -= 360;
+            if (angle.Y >= 360) angle.Y -= 360;
+            if (angle.Z >= 360) angle.Z -= 360;
         }
     }
 }
