@@ -33,6 +33,7 @@ namespace scene3d_animation
             this.glControl1 = new OpenTK.GLControl();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.trackBar1 = new System.Windows.Forms.TrackBar();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -50,28 +51,36 @@ namespace scene3d_animation
             // 
             // timer1
             // 
-            this.timer1.Enabled = true;
-            this.timer1.Interval = 16;
+            this.timer1.Interval = 8;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // trackBar1
             // 
-            this.trackBar1.Location = new System.Drawing.Point(12, 641);
-            this.trackBar1.Maximum = 7500;
+            this.trackBar1.Location = new System.Drawing.Point(12, 660);
+            this.trackBar1.Maximum = 3500;
             this.trackBar1.Name = "trackBar1";
             this.trackBar1.Size = new System.Drawing.Size(1310, 61);
             this.trackBar1.TabIndex = 1;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(1221, 632);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ReadOnly = true;
+            this.textBox1.Size = new System.Drawing.Size(100, 22);
+            this.textBox1.TabIndex = 2;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1341, 707);
+            this.ClientSize = new System.Drawing.Size(1341, 720);
+            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.trackBar1);
             this.Controls.Add(this.glControl1);
             this.KeyPreview = true;
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Сцена";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
@@ -85,6 +94,7 @@ namespace scene3d_animation
         private OpenTK.GLControl glControl1;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.TrackBar trackBar1;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }
 

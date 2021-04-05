@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Drawing;
 using OpenTK;
 using Assimp.Configs;
@@ -22,21 +18,24 @@ namespace scene3d_animation.Classes
         private int m_texId;
         private string dirname;
 
+        // Метод загрузки модели из файла
+        // Входные параметры: file - имя файла с моделью, notexture - отключить наложение текстуры на объект
         public int LoadPath(string file, bool notexture = false)
         {
+            // Определение полного пути к фалу и папки с файлом
             string fileName = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), file);
             dirname = Path.GetDirectoryName(fileName);
-
+            // Импортирование модели
             AssimpContext importer = new AssimpContext();
             importer.SetConfig(new NormalSmoothingAngleConfig(66.0f));
             m_model = importer.ImportFile(fileName, PostProcessPreset.TargetRealTimeMaximumQuality);
             ComputeBoundingBox();
-
+            // Расчет параметров для задания размера модели и помещения ее в центр сцены
             float tmp = m_sceneMax.X - m_sceneMin.X;
             tmp = Math.Max(m_sceneMax.Y - m_sceneMin.Y, tmp);
             tmp = Math.Max(m_sceneMax.Z - m_sceneMin.Z, tmp);
             tmp = 1.0f / tmp;
-
+            // Создание displayList с импортированной моделью
             int m_displayList = GL.GenLists(1);
             GL.NewList(m_displayList, ListMode.Compile);
             GL.PushMatrix();
@@ -44,15 +43,17 @@ namespace scene3d_animation.Classes
                 GL.Disable(EnableCap.Texture2D);
             GL.Scale(tmp * 2, tmp * 2, tmp * 2);
             GL.Translate(-m_sceneCenter);
+            // Рендеринг модели
             RecursiveRender(m_model, m_model.RootNode);
             if (notexture)
                 GL.Enable(EnableCap.Texture2D);
             GL.PopMatrix();
             GL.EndList();
-
+            // Возврат displaylist с моделью
             return m_displayList;
         }
 
+        // Расчет ограничительной рамки вокруг объекта и его центра
         private void ComputeBoundingBox()
         {
             m_sceneMin = new Vector3(1e10f, 1e10f, 1e10f);
@@ -66,6 +67,7 @@ namespace scene3d_animation.Classes
             m_sceneCenter.Z = (m_sceneMin.Z + m_sceneMax.Z) / 2.0f;
         }
 
+        // Расчет ограничительной рамки вокруг объекта и его центра
         private void ComputeBoundingBox(Node node, ref Vector3 min, ref Vector3 max, ref Matrix4 trafo)
         {
             Matrix4 prev = trafo;
@@ -99,6 +101,7 @@ namespace scene3d_animation.Classes
             trafo = prev;
         }
 
+        // Рендеринг объекта
         private void RecursiveRender(Scene scene, Node node)
         {
             Matrix4 m = FromMatrix(node.Transform);
@@ -184,6 +187,7 @@ namespace scene3d_animation.Classes
             }
         }
 
+        // Загрузка текстуры в память
         private void LoadTexture(String fileName)
         {
             fileName = Path.Combine(dirname, fileName);
@@ -191,6 +195,7 @@ namespace scene3d_animation.Classes
             {
                 return;
             }
+            // Загрузка изображения
             Bitmap textureBitmap = new Bitmap(fileName);
             BitmapData TextureData =
                     textureBitmap.LockBits(
@@ -204,11 +209,12 @@ namespace scene3d_animation.Classes
             GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb, textureBitmap.Width, textureBitmap.Height, 0,
                 OpenTK.Graphics.OpenGL.PixelFormat.Bgr, PixelType.UnsignedByte, TextureData.Scan0);
             textureBitmap.UnlockBits(TextureData);
-
+            // Настройка фильтрации текстуры
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
         }
 
+        // Применение материала к объекту
         private void ApplyMaterial(Material mat)
         {
             if (mat.GetMaterialTextureCount(TextureType.Diffuse) > 0)
@@ -260,6 +266,7 @@ namespace scene3d_animation.Classes
             GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Shininess, shininess * strength);
         }
 
+        // Перевод матрицы с библиотеки Assimp в матрицу OpenTK
         private Matrix4 FromMatrix(Matrix4x4 mat)
         {
             Matrix4 m = new Matrix4();
@@ -281,6 +288,8 @@ namespace scene3d_animation.Classes
             m.M44 = mat.D4;
             return m;
         }
+
+        // Перевод вектора с библиотеки Assimp в вектор OpenTK
         private Vector3 FromVector(Vector3D vec)
         {
             Vector3 v;
@@ -290,6 +299,7 @@ namespace scene3d_animation.Classes
             return v;
         }
 
+        // Перевод цвета с библиотеки Assimp в цвет OpenTK
         private Color4 FromColor(Color4D color)
         {
             Color4 c;

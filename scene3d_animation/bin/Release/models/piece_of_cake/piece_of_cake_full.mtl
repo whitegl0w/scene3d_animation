@@ -1,0 +1,35 @@
+# Blender MTL File: 'None'
+# Material Count: 3
+
+newmtl default.004
+Ns 99.999988
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd E:\\Projects\\scene3d_animation\\scene3d_animation\\scene3d_animation\\bin\\Debug\\models\\piece_of_cake\\piece_of_cake_Albedo.png
+
+newmtl default.005
+Ns 99.999988
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd E:\\Projects\\scene3d_animation\\scene3d_animation\\scene3d_animation\\bin\\Debug\\models\\piece_of_cake\\piece_of_cake_Albedo.png
+
+newmtl default.006
+Ns 99.999988
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd E:\\Projects\\scene3d_animation\\scene3d_animation\\scene3d_animation\\bin\\Debug\\models\\piece_of_cake\\piece_of_cake_Albedo.png

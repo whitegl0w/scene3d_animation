@@ -1,32 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Drawing;
+﻿using System.Collections.Generic;
 using OpenTK;
-using Assimp.Configs;
-using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
-using System.Reflection;
-using System.Drawing.Imaging;
-using Assimp;
-using System.IO;
 
 namespace scene3d_animation.Classes
 {
     class Model3D
     {
+        // displayList с объектом
         public int displayList;
         public string name;
+        // Параметры объекта
         public Vector3 position;
         public Vector3 size;
         public Vector3 angle;
+        // Анимация объекта
         private List<Animation.AnimationFunc> animationrotate;
         private List<Animation.AnimationFunc> animationscale;
         private List<Animation.AnimationFunc> animationtrans;
 
-        // name - произвольное имя объекта
+        // Создание объекта
+        // name - заданное имя объекта
         private Model3D(string name = "")
         {
             this.name = name;
@@ -45,16 +38,18 @@ namespace scene3d_animation.Classes
             displayList = loader.LoadPath(filename, notexture);
             
         }
+
+        // displayList - скомпилированный displayList с объектом, name - произвольное имя объекта
         public Model3D(int displayList, string name = ""):this(name)
         {
             this.displayList = displayList;
         }
 
+        // отрисовка объекта
         public void Draw()
         {
             GL.PushMatrix();
             GL.Translate(position);
-            
             GL.Rotate(angle.X, 1, 0, 0);
             GL.Rotate(angle.Y, 0, 1, 0);
             GL.Rotate(angle.Z, 0, 0, 1);
@@ -63,6 +58,7 @@ namespace scene3d_animation.Classes
             GL.PopMatrix();
         }
 
+        // Получение списка действий для анимации 
         public List<Animation.AnimationFunc> AnimationRotate
         {
             get => animationrotate;
@@ -78,8 +74,10 @@ namespace scene3d_animation.Classes
             get => animationtrans;
         }
 
+        // Расчет новых параметров объекта в момент времени time
         public void AnimationTick(int time)
         {
+            // Расчет новых параметров объекта
             animationtrans.ForEach(x =>
             {
                 if (x.start <= time && time <= x.end)
